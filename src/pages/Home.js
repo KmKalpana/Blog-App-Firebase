@@ -1,15 +1,4 @@
-import {
-  collection,
-  deleteDoc,
-  doc,
-  getDocs,
-  limit,
-  onSnapshot,
-  query,
-  orderBy,
-  where,
-  startAfter,
-} from "firebase/firestore";
+import {collection, deleteDoc, doc, getDocs, limit, onSnapshot, query, orderBy, where, startAfter,} from "firebase/firestore";
 import React, { useState, useEffect } from "react";
 import BlogSection from "../components/BlogSection";
 import Spinner from "../components/Spinner";
@@ -22,6 +11,7 @@ import Search from "../components/Search";
 import { isEmpty, isNull } from "lodash";
 import { useLocation } from "react-router-dom";
 import Category from "../components/Category";
+
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
@@ -64,8 +54,6 @@ const Home = ({ setActive, user, active }) => {
           list.push({ id: doc.id, ...doc.data() });
         });
         const uniqueTags = [...new Set(tags)];
-        // @ts-ignore
-        setTags(uniqueTags);
         // @ts-ignore
         setTotalBlogs(list);
         // setBlogs(list);
@@ -197,7 +185,6 @@ const Home = ({ setActive, user, active }) => {
       prevValue[name] = 0;
     }
     prevValue[name]++;
-    // delete prevValue["undefined"];
     return prevValue;
   }, {});
 
@@ -216,7 +203,6 @@ const Home = ({ setActive, user, active }) => {
         <div className="row mx-0">
           <Trending blogs={trendBlogs} />
           <div className="col-md-8">
-            <div className="blog-heading text-start py-2 mb-4">Daily Blogs</div>
             {blogs.length === 0 && location.pathname !== "/" && (
               <>
                 <h4>

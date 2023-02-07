@@ -19,6 +19,7 @@ const TagBlog = ({setActive}) => {
     docSnapshot.forEach((doc) => {
       tagBlogs.push({ id: doc.id, ...doc.data() });
     });
+    // @ts-ignore
     setTagBlogs(tagBlogs);
     setLoading(false);
   };
@@ -38,11 +39,15 @@ const TagBlog = ({setActive}) => {
       <div className="container">
         <div className="row">
           <div className="blog-heading text-center py-2 mb-4">
-            Tag: <strong>{tag.toLocaleUpperCase()}</strong>
+            Tag: <strong>{
+// @ts-ignore
+            tag.toLocaleUpperCase()}</strong>
           </div>
           {tagBlogs?.map((item) => (
             <div className="col-md-6">
-              <BlogSection key={item.id} {...item} />
+              <BlogSection key={item.
+// @ts-ignore
+              id} {...item} />
             </div>
           ))}
         </div>

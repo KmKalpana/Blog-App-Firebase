@@ -46,7 +46,9 @@ const AddEditBlog = ({ user, setActive }) => {
 
   useEffect(() => {
     const uploadFile = () => {
+      // @ts-ignore
       const storageRef = ref(storage, file.name);
+      // @ts-ignore
       const uploadTask = uploadBytesResumable(storageRef, file);
       uploadTask.on(
         "state_changed",
@@ -54,6 +56,7 @@ const AddEditBlog = ({ user, setActive }) => {
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           console.log("Upload is " + progress + "% done");
+          // @ts-ignore
           setProgress(progress);
           switch (snapshot.state) {
             case "paused":
@@ -87,9 +90,11 @@ const AddEditBlog = ({ user, setActive }) => {
   }, [id]);
 
   const getBlogDetail = async () => {
+    // @ts-ignore
     const docRef = doc(db, "blogs", id);
     const snapshot = await getDoc(docRef);
     if (snapshot.exists()) {
+      // @ts-ignore
       setForm({ ...snapshot.data() });
     }
     setActive(null);
@@ -228,6 +233,7 @@ const AddEditBlog = ({ user, setActive }) => {
                 <input
                   type="file"
                   className="form-control"
+                  // @ts-ignore
                   onChange={(e) => setFile(e.target.files[0])}
                 />
               </div>

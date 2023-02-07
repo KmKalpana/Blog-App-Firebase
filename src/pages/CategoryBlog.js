@@ -19,6 +19,7 @@ const CategoryBlog = ({ setActive }) => {
     docSnapshot.forEach((doc) => {
       categoryBlogs.push({ id: doc.id, ...doc.data() });
     });
+    // @ts-ignore
     setCategoryBlogs(categoryBlogs);
     setLoading(false);
   };
@@ -37,11 +38,15 @@ const CategoryBlog = ({ setActive }) => {
       <div className="container">
         <div className="row">
           <div className="blog-heading text-center py-2 mb-4">
-            Category: <strong>{category.toLocaleUpperCase()}</strong>
+            Category: <strong>{
+// @ts-ignore
+            category.toLocaleUpperCase()}</strong>
           </div>
           {categoryBlogs?.map((item) => (
             <div className="col-md-6">
-              <BlogSection key={item.id} {...item} />
+              <BlogSection key={item.
+// @ts-ignore
+              id} {...item} />
             </div>
           ))}
         </div>
