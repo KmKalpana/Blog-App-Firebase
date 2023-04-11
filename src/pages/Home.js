@@ -1,3 +1,4 @@
+ // @ts-ignore
 import {collection, deleteDoc, doc, getDocs, limit, onSnapshot, query, orderBy, where, startAfter,} from "firebase/firestore";
 import React, { useState, useEffect } from "react";
 import BlogSection from "../components/BlogSection";
@@ -37,7 +38,6 @@ const Home = ({ setActive, user, active }) => {
     querySnapshot.forEach((doc) => {
       trendBlogs.push({ id: doc.id, ...doc.data() });
     });
-    // @ts-ignore
     setTrendBlogs(trendBlogs);
   };
 
@@ -54,6 +54,9 @@ const Home = ({ setActive, user, active }) => {
           list.push({ id: doc.id, ...doc.data() });
         });
         const uniqueTags = [...new Set(tags)];
+        //console.log(uniqueTags);
+        // @ts-ignore
+        setTags(uniqueTags);
         // @ts-ignore
         setTotalBlogs(list);
         // setBlogs(list);
@@ -198,10 +201,11 @@ const Home = ({ setActive, user, active }) => {
   console.log("categoryCount", categoryCount);
 
   return (
-    <div className="container-fluid pb-4 pt-4 padding">
+    <div className="container-fluid pb-6 pt-4 padding">
       <div className="container padding">
         <div className="row mx-0">
-          <Trending blogs={trendBlogs} />
+         <h1>Blog Website</h1>
+          <hr />
           <div className="col-md-8">
             {blogs.length === 0 && location.pathname !== "/" && (
               <>
@@ -209,15 +213,13 @@ const Home = ({ setActive, user, active }) => {
                   No Blog found with search keyword:{" "}
                   <strong>{searchQuery}</strong>
                 </h4>
-              </>
-            )}
-            {blogs?.map((blog) => (
+              </> )
+            }
+            { blogs?.map((blog) => (
               <BlogSection
-                // @ts-ignore
                 key={blog.id}
                 user={user}
                 handleDelete={handleDelete}
-                // @ts-ignore
                 {...blog}
               />
             ))}
@@ -228,10 +230,10 @@ const Home = ({ setActive, user, active }) => {
               </button>
             )}
           </div>
-          <div className="col-md-3">
+          <div style={{paddingLeft:"10%"}} className="col-md-4">
             <Search search={search} handleChange={handleChange} />
             <div className="blog-heading text-start py-2 mb-4">Tags</div>
-            <Tags tags={tags} />
+            <Tags tags={tags} /> 
             <FeatureBlogs title={"Most Popular"} blogs={blogs} />
             <Category catgBlogsCount={categoryCount} />
           </div>

@@ -34,7 +34,7 @@ const Detail = ({ setActive, user }) => {
   const [comments, setComments] = useState([]);
   let [likes, setLikes] = useState([]);
   const [userComment, setUserComment] = useState("");
-  const [relatedBlogs, setRelatedBlogs] = useState([]);
+
 
   useEffect(() => {
     const getRecentBlogs = async () => {
@@ -84,13 +84,6 @@ const Detail = ({ setActive, user }) => {
     setComments(blogDetail.data().comments ? blogDetail.data().comments : []);
     // @ts-ignore
     setLikes(blogDetail.data().likes ? blogDetail.data().likes : []);
-    const relatedBlogSnapshot = await getDocs(relatedBlogsQuery);
-    const relatedBlogs = [];
-    relatedBlogSnapshot.forEach((doc) => {
-      relatedBlogs.push({ id: doc.id, ...doc.data() });
-    });
-    // @ts-ignore
-    setRelatedBlogs(relatedBlogs);
     setActive(null);
     setLoading(false);
   };
@@ -139,8 +132,6 @@ const Detail = ({ setActive, user }) => {
       });
     }
   };
-
-  console.log("relatedBlogs", relatedBlogs);
   return (
     <div className="single">
       <div
@@ -213,7 +204,7 @@ const Detail = ({ setActive, user }) => {
               <FeatureBlogs title={"Recent Blogs"} blogs={blogs} />
             </div>
           </div>
-          <RelatedBlog id={id} blogs={relatedBlogs} />
+          
         </div>
       </div>
     </div>
@@ -221,3 +212,24 @@ const Detail = ({ setActive, user }) => {
 };
 
 export default Detail;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{/** <RelatedBlog id={id} blogs={relatedBlogs} /> */}
