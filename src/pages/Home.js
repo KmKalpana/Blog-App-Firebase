@@ -1,3 +1,4 @@
+// @ts-nocheck
  // @ts-ignore
 import {collection, deleteDoc, doc, getDocs, limit, onSnapshot, query, orderBy, where, startAfter,} from "firebase/firestore";
 import React, { useState, useEffect } from "react";
@@ -7,7 +8,6 @@ import { db } from "../firebase";
 import { toast } from "react-toastify";
 import Tags from "../components/Tags";
 import FeatureBlogs from "../components/FeatureBlogs";
-import Trending from "../components/Trending";
 import Search from "../components/Search";
 import { isEmpty, isNull } from "lodash";
 import { useLocation } from "react-router-dom";
@@ -23,26 +23,14 @@ const Home = ({ setActive, user, active }) => {
   const [tags, setTags] = useState([]);
   const [search, setSearch] = useState("");
   const [lastVisible, setLastVisible] = useState(null);
-  const [trendBlogs, setTrendBlogs] = useState([]);
   const [totalBlogs, setTotalBlogs] = useState(null);
   const [hide, setHide] = useState(false);
   const queryString = useQuery();
   const searchQuery = queryString.get("searchQuery");
   const location = useLocation();
 
-  const getTrendingBlogs = async () => {
-    const blogRef = collection(db, "blogs");
-    const trendQuery = query(blogRef, where("trending", "==", "yes"));
-    const querySnapshot = await getDocs(trendQuery);
-    let trendBlogs = [];
-    querySnapshot.forEach((doc) => {
-      trendBlogs.push({ id: doc.id, ...doc.data() });
-    });
-    setTrendBlogs(trendBlogs);
-  };
 
   useEffect(() => {
-    getTrendingBlogs();
     setSearch("");
     const unsub = onSnapshot(
       collection(db, "blogs"),
@@ -70,7 +58,6 @@ const Home = ({ setActive, user, active }) => {
 
     return () => {
       unsub();
-      getTrendingBlogs();
     };
   }, [setActive, active]);
 
@@ -84,9 +71,7 @@ const Home = ({ setActive, user, active }) => {
     console.log(blogRef);
     const firstFour = query(blogRef, orderBy("title"), limit(4));
     const docSnapshot = await getDocs(firstFour);
-    // @ts-ignore
     setBlogs(docSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
-    // @ts-ignore
     setLastVisible(docSnapshot.docs[docSnapshot.docs.length - 1]);
   };
 
@@ -99,7 +84,6 @@ const Home = ({ setActive, user, active }) => {
         id: doc.id,
         ...doc.data(),
       }));
-      // @ts-ignore
       setBlogs((blogs) => [...blogs, ...blogsData]);
       setLastVisible(docSnapshot.docs[docSnapshot.docs.length - 1]);
     } else {
@@ -141,7 +125,6 @@ const Home = ({ setActive, user, active }) => {
       searchTagBlogs.push({ id: doc.id, ...doc.data() });
     });
     const combinedSearchBlogs = searchTitleBlogs.concat(searchTagBlogs);
-    // @ts-ignore
     setBlogs(combinedSearchBlogs);
     setHide(true);
     setActive("");
@@ -181,7 +164,6 @@ const Home = ({ setActive, user, active }) => {
   };
 
   // category count
-  // @ts-ignore
   const counts = totalBlogs.reduce((prevValue, currentValue) => {
     let name = currentValue.category;
     if (!prevValue.hasOwnProperty(name)) {
@@ -206,7 +188,7 @@ const Home = ({ setActive, user, active }) => {
         <div className="row mx-0">
          <h1>Blog Website</h1>
           <hr />
-          <div className="col-md-8">
+          <div className="col-md-7">
             {blogs.length === 0 && location.pathname !== "/" && (
               <>
                 <h4>
@@ -230,12 +212,13 @@ const Home = ({ setActive, user, active }) => {
               </button>
             )}
           </div>
-          <div style={{paddingLeft:"10%"}} className="col-md-4">
+          <div style={{paddingLeft:"10%"}} className="col-md-5 pl-2">
             <Search search={search} handleChange={handleChange} />
-            <div className="blog-heading text-start py-2 mb-4">Tags</div>
+            <div className="blog-heading text-start py-2 mb-5">Tags</div>
             <Tags tags={tags} /> 
+             <Category catgBlogsCount={categoryCount} />
             <FeatureBlogs title={"Most Popular"} blogs={blogs} />
-            <Category catgBlogsCount={categoryCount} />
+           
           </div>
         </div>
       </div>
